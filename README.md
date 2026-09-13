@@ -27,8 +27,11 @@ length; these are listed in Table 1 of the essay.
 ## Setup
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
+python3 -m venv venv          # macOS/Linux
+#py -m venv venv              # Windows (or use python)
+
+source venv/bin/activate      # macOS/Linux   
+#venv\Scripts\activate        # Windows:
 pip install -r requirements.txt
 ```
 
