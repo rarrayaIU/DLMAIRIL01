@@ -1,0 +1,41 @@
+# Requirements for the DQN Pong implementation -- Roberto Arraya, 2026
+#
+# Covers three scripts:
+#   dqn_pong_v2.py        from-scratch DQN (training + --watch)
+#   dqn_sb3_control.py    Stable-Baselines3 reference run
+#   evaluate.py           frozen-checkpoint evaluation sweep
+#
+# Install:  pip install -r PongRequirements.txt
+#
+# Tested on macOS 15 (Apple Silicon, MPS backend). See the notes at the
+# bottom for Windows and Linux.
+
+# --- Core: required by all three scripts ---------------------------------
+torch>=2.3                  # 2.3+ required for the MPS backend on Apple Silicon
+gymnasium>=1.0              # environment API (successor to OpenAI Gym)
+ale-py>=0.10                # Arcade Learning Environment; bundles the ROMs
+opencv-python               # required by gymnasium's AtariPreprocessing wrapper
+numpy
+
+# --- Reference run only (dqn_sb3_control.py) -----------------------------
+stable-baselines3>=2.4      # 2.4+ required for Gymnasium 1.0 compatibility
+tensorboard                 # the control script writes to ./dqn_sb3_logs
+
+# --- Notes ---------------------------------------------------------------
+# Exact versions used for the results reported in the paper:
+#   ale-py 0.12.0 · gymnasium 1.3.0 · numpy 2.5.1 · torch 2.13.0
+#   stable-baselines3 2.9.0
+#
+# gymnasium[atari] is NOT required: the [atari] extra only pulls in ale-py,
+# which is already pinned above.
+#
+# Device selection is automatic (MPS, then CUDA, then CPU), so the same
+# code runs on macOS, Windows and Linux. On Windows or Linux with an
+# NVIDIA GPU, install the CUDA build of torch from https://pytorch.org
+# rather than the default CPU wheel.
+#
+# Memory: the replay buffer allocates two uint8 arrays of
+# (200000, 4, 84, 84), about 10.5 GiB in total. A machine with 16 GB of
+# RAM will be tight; reduce BUFFER_SIZE in dqn_pong_v2.py if needed.
+# Evaluation (evaluate.py) allocates no buffer and runs comfortably in
+# well under 1 GB.
